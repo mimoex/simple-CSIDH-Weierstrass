@@ -3,20 +3,15 @@
 //Weierstrass Curve
 Point ec_add(const Point& p, const Point& q, const mpz_class& a, const mpz_class& mod)
 {
-	//cout << "p:" << p.x << " " << p.y << endl;
-	//cout << "q:" << q.x << " " << q.y << endl;
 	if (p.inf == 1) return q;
 	if (q.inf == 1) return p;
 
 	mpz_class lambda_temp, y_1, lambda,px2,temp;
 	mpz_class lh, rh;
 	Point result;
-
-
-	//cout << "Px,Qx:" << p.x << "," << q.x << endl;
+	
 	if (p.x == q.x) {
-		//P + (-P) = 0
-		//cout << "Py,-Py:" << p.y << "," << -q.y << endl;
+		//P + (-P) = 0‚Ì‚Æ‚«
 		if ((p.y + q.y == mod) || (p.y == q.y && p.y == 0)) {
 			result.x = 0; result.y = 0;
 			result.inf = true;
@@ -55,14 +50,6 @@ Point ec_add(const Point& p, const Point& q, const mpz_class& a, const mpz_class
 	return result;
 }
 
-Point copy_point(const Point& p) {
-	Point result;
-	result.x = p.x;
-	result.y = p.y;
-	result.inf = p.inf;
-	return result;
-}
-
 bool sqrt_mod(const mpz_class& n, const mpz_class& p, mpz_class& result)
 {
 	mpz_class check;
@@ -83,11 +70,9 @@ Point gen_point_sqrt(const mpz_class& a, const mpz_class& b, const mpz_class& mo
 	result.inf = false;
 	mpz_class x, y, x_cube, x_sqr, y_temp, ax, rh, sqrt_result, testpow;
 	result.x = random_fp(mod);
-	//cout << "randX:" << result.x << endl;
-	bool sqrt_check = 0;
-	bool issqrt;
+	bool sqrt_check = false;
 
-	while (sqrt_check == 0) {
+	while (sqrt_check == false) {
 		pow_fp(result.x, 3, mod, &x_cube);
 
 		mul_fp(a, result.x, mod, &ax);
@@ -95,27 +80,19 @@ Point gen_point_sqrt(const mpz_class& a, const mpz_class& b, const mpz_class& mo
 		add_fp(x_cube, ax, mod, &y_temp);
 		add_fp(y_temp, b, mod, &rh);
 		
-		issqrt = sqrt_mod(rh, mod, sqrt_result);
-		//sqrt_check = 1;
-		if (issqrt == false) {	//®”‚¶‚á‚È‚¢‚Æ‚«
+		sqrt_check = sqrt_mod(rh, mod, sqrt_result);
+		if (sqrt_check == false) {	//®”‚¶‚á‚È‚¢‚Æ‚«
 			result.x++;
-			//cout << "rand:" << result.x << endl;
 		}
 		else {
-			sqrt_check = 1;
-			//mpz_sqrt(result.y.get_mpz_t(), rh.get_mpz_t());
 			result.y = sqrt_result;
-			//test
-			pow_fp(result.y, 2, mod, &testpow);
-			if (testpow != rh) cout << "ˆá‚¤" << endl;
-			//cout <<"x,y :"<< result.x<<", " << result.y << endl;
+			return result;
 		}
 	}
-	return result;
 }
 
-/*** y^2=x^3+a*x+b‚Ì“_‚Å‚ ‚ê‚Î0‚ð•Ô‚· ***/
-size_t check_point(const Point& p, const mpz_class a, const mpz_class b, const mpz_class& mod)
+/*** y^2=x^3+a*x+b‚Ì“_‚Å‚ ‚ê‚Îtrue‚ð•Ô‚· ***/
+bool check_point(const Point& p, const mpz_class a, const mpz_class b, const mpz_class& mod)
 {
 	mpz_class x_cube, rh, lh, ax;
 	pow_fp(p.x, 3, mod, &x_cube);
@@ -127,6 +104,6 @@ size_t check_point(const Point& p, const mpz_class a, const mpz_class b, const m
 
 	pow_fp(p.y, 2, mod, &lh);
 
-	if (lh == rh)	return 0;
-	else			return 1;
+	if (lh == rh)	return true;
+	else			return false;
 }

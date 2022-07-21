@@ -35,13 +35,10 @@ void div_fp(const mpz_class& a, const mpz_class& b, const mpz_class& p, mpz_clas
 //pˆÈ‰º‚Ì—”‚ğ¶¬
 mpz_class random_fp(const mpz_class& p);
 
-
-Point copy_point(const Point& p);
-
 //Weierstrass‹Èü‚Ì‰ÁZŒö®
 Point ec_add(const Point& p, const Point& q, const mpz_class& a, const mpz_class& mod);
 
 //‘È‰~‹Èüã‚Ì“_‚ğ¶¬
 Point gen_point(const mpz_class& a, const mpz_class& b, const mpz_class& mod);
-size_t check_point(const Point& p, const mpz_class a, const mpz_class b, const mpz_class& mod);
+bool check_point(const Point& p, const mpz_class a, const mpz_class b, const mpz_class& mod);
 Point gen_point_sqrt(const mpz_class& a, const mpz_class& b, const mpz_class& mod);

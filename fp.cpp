@@ -1,25 +1,15 @@
 #include "fp.h"
 
-mpz_class mod(mpz_class a, mpz_class b) {
-	return (a %= b) < 0 ? a + b : a;
-}
-
 void add_fp(const mpz_class& a, const mpz_class& b, const mpz_class& p, mpz_class* c)
 {
 	*c = a + b;
 	if (*c >= p) *c -= p;
-	//*c = *c % p;
 }
 
 void sub_fp(const mpz_class& a, const mpz_class& b, const mpz_class& p, mpz_class* c)
 {
-	if (a >= b) {
-		*c = a - b;
-	}
-	else {
-		*c = a + p - b;
-	}
-	//*c = mod(a - b, p);
+	if (a >= b) *c = a - b;
+	else *c = a + p - b;
 }
 
 
@@ -38,7 +28,6 @@ void sqr_fp(const mpz_class& a, const mpz_class& p, mpz_class* c)
 
 void pow_fp(const mpz_class& a, const mpz_class& b, const mpz_class& p, mpz_class* c)
 {
-	//*c = a;
 	mpz_powm(c->get_mpz_t(), a.get_mpz_t(), b.get_mpz_t(), p.get_mpz_t());
 }
 
@@ -47,7 +36,6 @@ void inv_fp(const mpz_class& a, const mpz_class& p, mpz_class* c)
 {
 	if (a == 0) {
 		throw std::range_error("Divided by zero.");
-		//*c = 0;
 
 	}
 	else {
